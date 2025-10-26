@@ -1,0 +1,101 @@
+html {
+  font-size: 10px;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #444;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+
+  background-image:
+  radial-gradient(circle at 100% 150%, #444 24%, #BB2121 25%, #BB2121 28%, #444 29%, #444 36%, #BB2121 36%, #BB2121 40%, transparent 40%, transparent),
+  radial-gradient(circle at 0    150%, #444 24%, #BB2121 25%, #BB2121 28%, #444 29%, #444 36%, #BB2121 36%, #BB2121 40%, transparent 40%, transparent),
+  radial-gradient(circle at 50%  100%, #BB2121 10%, #444 11%, #444 23%, #BB2121 24%, #BB2121 30%, #444 31%, #444 43%, #BB2121 44%, #BB2121 50%, #444 51%, #444 63%, #BB2121 64%, #BB2121 71%, transparent 71%, transparent),
+  radial-gradient(circle at 100% 50%, #BB2121 5%, #444 6%, #444 15%, #BB2121 16%, #BB2121 20%, #444 21%, #444 30%, #BB2121 31%, #BB2121 35%, #444 36%, #444 45%, #BB2121 46%, #BB2121 49%, transparent 50%, transparent),
+  radial-gradient(circle at 0    50%, #BB2121 5%, #444 6%, #444 15%, #BB2121 16%, #BB2121 20%, #444 21%, #444 30%, #BB2121 31%, #BB2121 35%, #444 36%, #444 45%, #BB2121 46%, #BB2121 49%, transparent 50%, transparent);
+  background-size:100px 50px;
+}
+
+.voiceinator{
+  padding: 2rem;
+  width: 80vw;
+  margin: 0 auto;
+  border-radius: 1rem;
+  position: relative;
+  background: white;
+  overflow: hidden;
+  z-index: 1;
+}
+
+h1 {
+  width: calc(100% + 4rem);
+  margin: -2rem 0 2rem -2rem;
+  padding: .5rem;
+  background: #ffc600;
+  border-bottom: 5px solid #F3C010;
+  text-align: center;
+  font-size: 5rem;
+  font-weight: 100;
+}
+
+input,
+button,
+select,
+textarea {
+  width: 100%;
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  border: 0;
+  font-size: 2rem;
+  background: #F7F7F7;
+  outline: 0;
+  margin: 0 auto;
+}
+
+textarea {
+  /* height: 20rem; */
+  font-size: 2rem !important;
+  border: 1px solid red;
+}
+
+#speak, 
+#stop,
+#pause {
+  background-color: #ffc600;
+  margin-bottom: 0;
+  font-size: 3rem;
+  cursor: pointer;
+  margin: 0 auto;
+  border:  2px solid red;
+  border-radius: 6px;
+}
+
+.active {
+  background-color: red !important; 
+  color: white;
+}
+
+#countdown {
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 3rem;
+}
+
+button:active {
+  top: 2px;
+}
+
+#textarea {
+  background-color: #ddd;
+  padding: 2rem 1rem;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>My Reader</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<body>
+
+    <div class="voiceinator" style="display: flex; flex-direction: column; gap: 20px; width: 100%; text-align: center;">
+
+      <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+        <h1 id="stop">STOP</h1>
+        <h1 id="pause">PAUSE</h1>
+        <h1 id="speak">PLAY</h1>
+      </div>
+
+      <select id="myvoices" name="myvoices" title="my voices">
+        <option value="">Select A Voice</option>
+      </select>
+
+      <div style="font-size: 2rem;">
+        <label for="rate">Rate:</label>
+        <input id="rate" name="rate" type="range" min="0" max="3" value="2.2" step="0.1">
+      </div>
+
+      <div style="display: none;">
+        <label for="pitch">Pitch:</label>
+        <input id="pitch" name="pitch" type="range" min="0" max="2" step="0.1">
+      </div>
+
+      <div id="textarea" style="font-size: 2rem; border-radius: 4px;" contenteditable="">
+        Hello, this is my reader application. You can type or paste text into the box below, select a voice, and click the
+        play button to hear it read aloud. Adjust the rate slider to customize the voice to your liking. Enjoy listening!
+      </div>
+
+    </div>
+
+
+  <script src="voice.js"></script>
+
+</body>
+</html>
