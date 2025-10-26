@@ -23,6 +23,8 @@ body {
   radial-gradient(circle at 100% 50%, #BB2121 5%, #444 6%, #444 15%, #BB2121 16%, #BB2121 20%, #444 21%, #444 30%, #BB2121 31%, #BB2121 35%, #444 36%, #444 45%, #BB2121 46%, #BB2121 49%, transparent 50%, transparent),
   radial-gradient(circle at 0    50%, #BB2121 5%, #444 6%, #444 15%, #BB2121 16%, #BB2121 20%, #444 21%, #444 30%, #BB2121 31%, #BB2121 35%, #444 36%, #444 45%, #BB2121 46%, #BB2121 49%, transparent 50%, transparent);
   background-size:100px 50px;
+
+  padding: 0 20px;
 }
 
 .voiceinator{
