@@ -4,42 +4,217 @@
 <head>
   <meta charset="UTF-8">
   <title>My Reader</title>
-  <link rel="stylesheet" href="style.css?v=2">
+
+  <style>
+    html {
+      font-size: 10px;
+      box-sizing: border-box;
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #444;
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      background-color: #444;
+      padding: 0 20px;
+    }
+
+    .voiceinator {
+      padding: 2rem;
+      width: 80vw;
+      margin: 0 auto;
+      border-radius: 1rem;
+      position: relative;
+      background: white;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    h1 {
+      width: calc(100% + 4rem);
+      margin: -2rem 0 2rem -2rem;
+      padding: .5rem;
+      background: #ffc600;
+      border-bottom: 5px solid #F3C010;
+      text-align: center;
+      font-size: 5rem;
+      font-weight: 100;
+    }
+
+    input,
+    button,
+    select,
+    textarea {
+      width: 100%;
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border: 0;
+      font-size: 2rem;
+      background: #F7F7F7;
+      outline: 0;
+      margin: 0 auto;
+    }
+
+    textarea {
+      /* height: 20rem; */
+      font-size: 2rem !important;
+      border: 1px solid red;
+    }
+
+    #speak,
+    #stop,
+    #pause {
+      background-color: #ffc600;
+      margin-bottom: 0;
+      font-size: 3rem;
+      cursor: pointer;
+      margin: 0 auto;
+      border: 2px solid red;
+      border-radius: 6px;
+    }
+
+    .active {
+      background-color: red !important;
+      color: white;
+    }
+
+    #countdown {
+      padding-top: 2rem;
+      text-align: center;
+      font-size: 3rem;
+    }
+
+    button:active {
+      top: 2px;
+    }
+
+    #textarea {
+      background-color: #ddd;
+      padding: 2rem 1rem;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="voiceinator" style="display: flex; flex-direction: column; gap: 20px; width: 100%; text-align: center;">
+  <div class="voiceinator" style="display: flex; flex-direction: column; gap: 20px; width: 100%; text-align: center;">
 
-      <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-        <h1 id="stop">STOP</h1>
-        <h1 id="pause">PAUSE</h1>
-        <h1 id="speak">PLAY</h1>
-      </div>
-
-      <select id="myvoices" name="myvoices" title="my voices">
-        <option value="">Select A Voice</option>
-      </select>
-
-      <div style="font-size: 2rem;">
-        <label for="rate">Rate:</label>
-        <input id="rate" name="rate" type="range" min="0" max="3" value="2.2" step="0.1">
-      </div>
-
-      <div style="display: none;">
-        <label for="pitch">Pitch:</label>
-        <input id="pitch" name="pitch" type="range" min="0" max="2" step="0.1">
-      </div>
-
-      <div id="textarea" style="font-size: 2rem; border-radius: 4px;" contenteditable="">
-        Hello, this is my reader application. You can type or paste text into the box below, select a voice, and click the
-        play button to hear it read aloud. Adjust the rate slider to customize the voice to your liking. Enjoy listening!
-      </div>
-
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+      <h1 id="stop">STOP</h1>
+      <h1 id="pause">PAUSE</h1>
+      <h1 id="speak">PLAY</h1>
     </div>
 
+    <select id="myvoices" name="myvoices" title="my voices">
+      <option value="">Select A Voice</option>
+    </select>
 
-  <script src="voice.js"></script>
+    <div style="font-size: 2rem;">
+      <label for="rate">Rate:</label>
+      <input id="rate" name="rate" type="range" min="0" max="3" value="2.2" step="0.1">
+    </div>
+
+    <div style="display: none;">
+      <label for="pitch">Pitch:</label>
+      <input id="pitch" name="pitch" type="range" min="0" max="2" step="0.1">
+    </div>
+
+    <div id="textarea" style="font-size: 2rem; border-radius: 4px;" contenteditable="">
+      Hello, this is my reader application. You can type or paste text into the box below, select a voice, and click the
+      play button to hear it read aloud. Adjust the rate slider to customize the voice to your liking. Enjoy listening!
+    </div>
+
+  </div>
+
+
+  <script>
+    const msg = new SpeechSynthesisUtterance();
+    let voices = [];
+    const voicesDropdown = document.getElementById('myvoices');
+    const options = document.querySelectorAll('[type="range"], [name="text"]');
+    const speakButton = document.getElementById('speak');
+    const pauseButton = document.getElementById('pause');
+    const stopButton = document.getElementById('stop');
+    const synth = window.speechSynthesis;
+    const textArea = document.getElementById('textarea');
+
+    let isPaused = false;
+
+    function populateVoices() {
+      voices = synth.getVoices();
+      voicesDropdown.innerHTML = voices
+        .filter(voice => voice.lang.includes('en'))
+        .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+        .join('');
+    }
+
+    function setVoice() {
+      msg.voice = voices.find(voice => voice.name === this.value);
+      toggle();
+    }
+
+    function toggle() {
+      if (isPaused) {
+        synth.resume();
+        isPaused = false;
+      } else {
+        msg.text = textArea.innerText;
+        msg["rate"] = document.getElementById("rate").value;;
+        msg["pitch"] = document.getElementById("pitch").value;;
+        synth.speak(msg);
+      }
+    }
+
+    synth.addEventListener('voiceschanged', populateVoices);
+    voicesDropdown.addEventListener('change', setVoice);
+
+    speakButton.addEventListener('click', () => {
+      msg["text"] = textArea.innerText;
+      toggle();
+
+      isPaused = false;
+      speakButton.classList.add('active');
+      pauseButton.classList.remove('active');
+      stopButton.classList.remove('active');
+    });
+
+
+    pauseButton.addEventListener('click', () => {
+      if (!synth.speaking) {
+        return;
+      }
+
+      isPaused = true;
+      synth.pause();
+
+      pauseButton.classList.add('active');
+      speakButton.classList.remove('active');
+      stopButton.classList.remove('active');
+    });
+
+    stopButton.addEventListener('click', () => {
+      isPaused = false;
+      synth.cancel();
+
+      stopButton.classList.add('active');
+      speakButton.classList.remove('active');
+      pauseButton.classList.remove('active');
+    });
+
+
+  </script>
 
 </body>
+
 </html>
